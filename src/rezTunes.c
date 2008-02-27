@@ -18,7 +18,7 @@
 #include <IOKit/usb/IOUSBLib.h>
 
 
-#define kTVisualPluginName	"\prezTunes"
+#define kTVisualPluginName	"\014rezTunes"
 #define	kTVisualPluginCreator	'hook'
 
 #define kTVisualPluginMajorVersion 1
@@ -254,7 +254,21 @@ static OSStatus RegisterVisualPlugin( PluginMessageInfo *messageInfo )
 	BlockMoveData( (Ptr)&pluginName[0], (Ptr)&playerMessageInfo.u.registerVisualPluginMessage.name[0], pluginName[0] + 1 );
 	SetNumVersion( &playerMessageInfo.u.registerVisualPluginMessage.pluginVersion, kTVisualPluginMajorVersion, kTVisualPluginMinorVersion, kTVisualPluginReleaseStage, kTVisualPluginNonFinalRelease );
 
-	playerMessageInfo.u.registerVisualPluginMessage.options					= 0;
+	#if TARGET_OS_MAC					
+		CFStringRef tCFStringRef = CFStringCreateWithPascalString( kCFAllocatorDefault, pluginName, kCFStringEncodingUTF8 );
+		if ( tCFStringRef ) 
+		{
+			CFIndex length = CFStringGetLength( tCFStringRef );
+			if ( length > 255 ) 
+			{
+				length = 255;
+			}
+			playerMessageInfo.u.registerVisualPluginMessage.unicodeName[0] = CFStringGetBytes( tCFStringRef, CFRangeMake( 0, length ), kCFStringEncodingUnicode, 0, FALSE, (UInt8 *) &playerMessageInfo.u.registerVisualPluginMessage.unicodeName[1], 255, NULL );
+			CFRelease( tCFStringRef );
+		}
+	#endif TARGET_OS_MAC
+
+	playerMessageInfo.u.registerVisualPluginMessage.options					= kVisualProvidesUnicodeName;
 	playerMessageInfo.u.registerVisualPluginMessage.handler					= (VisualPluginProcPtr)VisualPluginHandler;
 	playerMessageInfo.u.registerVisualPluginMessage.registerRefCon			= 0;
 	playerMessageInfo.u.registerVisualPluginMessage.creator					= kTVisualPluginCreator;
