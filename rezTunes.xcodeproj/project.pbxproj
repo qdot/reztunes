@@ -7,12 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C1AC899D0D7532D5003B921F /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1AC899C0D7532D5003B921F /* IOKit.framework */; };
 		C1AC89AD0D753556003B921F /* iTunesAPI.c in Sources */ = {isa = PBXBuildFile; fileRef = C1AC89A90D753556003B921F /* iTunesAPI.c */; };
 		C1AC89AE0D753556003B921F /* iTunesAPI.h in Headers */ = {isa = PBXBuildFile; fileRef = C1AC89AA0D753556003B921F /* iTunesAPI.h */; };
 		C1AC89AF0D753556003B921F /* iTunesVisualAPI.h in Headers */ = {isa = PBXBuildFile; fileRef = C1AC89AB0D753556003B921F /* iTunesVisualAPI.h */; };
 		C1AC89B00D753556003B921F /* rezTunes.c in Sources */ = {isa = PBXBuildFile; fileRef = C1AC89AC0D753556003B921F /* rezTunes.c */; };
 		C1AC89B30D753567003B921F /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C1AC89B20D753567003B921F /* Info.plist */; };
+		C1AC89DC0D7554DE003B921F /* libtrancevibe.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C1AC89DB0D7554DE003B921F /* libtrancevibe.dylib */; };
 		DC2667990BD9410900B4ED68 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C167DFE841241C02AAC07 /* InfoPlist.strings */; };
 		DC26679F0BD9410900B4ED68 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0AA1909FFE8422F4C02AAC07 /* CoreFoundation.framework */; };
 		DC2667A00BD9410900B4ED68 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01285BF100CC2F967F000001 /* Carbon.framework */; };
@@ -22,12 +22,12 @@
 		01285BF100CC2F967F000001 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		089C167EFE841241C02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		0AA1909FFE8422F4C02AAC07 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = /System/Library/Frameworks/CoreFoundation.framework; sourceTree = "<absolute>"; };
-		C1AC899C0D7532D5003B921F /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
 		C1AC89A90D753556003B921F /* iTunesAPI.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = iTunesAPI.c; path = src/iTunesAPI.c; sourceTree = "<group>"; };
 		C1AC89AA0D753556003B921F /* iTunesAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = iTunesAPI.h; path = src/iTunesAPI.h; sourceTree = "<group>"; };
 		C1AC89AB0D753556003B921F /* iTunesVisualAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = iTunesVisualAPI.h; path = src/iTunesVisualAPI.h; sourceTree = "<group>"; };
 		C1AC89AC0D753556003B921F /* rezTunes.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = rezTunes.c; path = src/rezTunes.c; sourceTree = "<group>"; };
 		C1AC89B20D753567003B921F /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C1AC89DB0D7554DE003B921F /* libtrancevibe.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libtrancevibe.dylib; path = /usr/local/lib/libtrancevibe.dylib; sourceTree = "<absolute>"; };
 		DC2667A60BD9410900B4ED68 /* rezTunes.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = rezTunes.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -38,28 +38,17 @@
 			files = (
 				DC26679F0BD9410900B4ED68 /* CoreFoundation.framework in Frameworks */,
 				DC2667A00BD9410900B4ED68 /* Carbon.framework in Frameworks */,
-				C1AC899D0D7532D5003B921F /* IOKit.framework in Frameworks */,
+				C1AC89DC0D7554DE003B921F /* libtrancevibe.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		01285C0000CC31B17F000001 /* iTunesVisualAPI */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = iTunesVisualAPI;
-			sourceTree = "<group>";
-		};
 		089C166AFE841209C02AAC07 /* iTunesPlugIn */ = {
 			isa = PBXGroup;
 			children = (
 				C1AC89B20D753567003B921F /* Info.plist */,
-				C1AC89A90D753556003B921F /* iTunesAPI.c */,
-				C1AC89AA0D753556003B921F /* iTunesAPI.h */,
-				C1AC89AB0D753556003B921F /* iTunesVisualAPI.h */,
-				C1AC89AC0D753556003B921F /* rezTunes.c */,
 				08FB77AFFE84173DC02AAC07 /* Source */,
 				089C167CFE841241C02AAC07 /* Resources */,
 				089C1671FE841209C02AAC07 /* External Frameworks and Libraries */,
@@ -71,7 +60,7 @@
 		089C1671FE841209C02AAC07 /* External Frameworks and Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				C1AC899C0D7532D5003B921F /* IOKit.framework */,
+				C1AC89DB0D7554DE003B921F /* libtrancevibe.dylib */,
 				0AA1909FFE8422F4C02AAC07 /* CoreFoundation.framework */,
 				01285BF100CC2F967F000001 /* Carbon.framework */,
 			);
@@ -89,7 +78,10 @@
 		08FB77AFFE84173DC02AAC07 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				01285C0000CC31B17F000001 /* iTunesVisualAPI */,
+				C1AC89A90D753556003B921F /* iTunesAPI.c */,
+				C1AC89AA0D753556003B921F /* iTunesAPI.h */,
+				C1AC89AB0D753556003B921F /* iTunesVisualAPI.h */,
+				C1AC89AC0D753556003B921F /* rezTunes.c */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -215,6 +207,43 @@
 			};
 			name = Default;
 		};
+		C1AC89F40D75572A003B921F /* Deployment NoPPC */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = i386;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+			};
+			name = "Deployment NoPPC";
+		};
+		C1AC89F50D75572A003B921F /* Deployment NoPPC */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GENERATE_PKGINFO_FILE = YES;
+				HEADER_SEARCH_PATHS = "/usr/local/include/**";
+				INFOPLIST_FILE = Info.plist;
+				LIBRARY_SEARCH_PATHS = "/usr/local/lib/**";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = rezTunes;
+				REZ_EXECUTABLE = YES;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = bundle;
+				ZERO_LINK = NO;
+			};
+			name = "Deployment NoPPC";
+		};
 		DC2667A20BD9410900B4ED68 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -226,9 +255,9 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GENERATE_PKGINFO_FILE = YES;
-				HEADER_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = "/usr/local/include/**";
 				INFOPLIST_FILE = Info.plist;
-				LIBRARY_SEARCH_PATHS = "";
+				LIBRARY_SEARCH_PATHS = "/usr/local/lib/**";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -255,9 +284,9 @@
 				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GENERATE_PKGINFO_FILE = YES;
-				HEADER_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = "/usr/local/include/**";
 				INFOPLIST_FILE = Info.plist;
-				LIBRARY_SEARCH_PATHS = "";
+				LIBRARY_SEARCH_PATHS = "/usr/local/lib/**";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -281,9 +310,9 @@
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				HEADER_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = "/usr/local/include/**";
 				INFOPLIST_FILE = Info.plist;
-				LIBRARY_SEARCH_PATHS = "";
+				LIBRARY_SEARCH_PATHS = "/usr/local/lib/**";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -307,6 +336,7 @@
 			buildConfigurations = (
 				AF2F40460BD811FE009D75EB /* Development */,
 				AF2F40470BD811FE009D75EB /* Deployment */,
+				C1AC89F40D75572A003B921F /* Deployment NoPPC */,
 				AF2F40480BD811FE009D75EB /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -317,6 +347,7 @@
 			buildConfigurations = (
 				DC2667A20BD9410900B4ED68 /* Development */,
 				DC2667A30BD9410900B4ED68 /* Deployment */,
+				C1AC89F50D75572A003B921F /* Deployment NoPPC */,
 				DC2667A40BD9410900B4ED68 /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;

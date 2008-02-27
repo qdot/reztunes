@@ -8,21 +8,19 @@
  *
  *  Copyright 2007 Bryn Davies. All rights reserved.
  *  ( But then relicensed - see README )
+ *  
+ *  Ported to libtrancevibe by Kyle Machulis (kyle@nonpolynomial.com)
+ *  http://www.nonpolynomial.com
  */
 
 #include "iTunesVisualAPI.h"
-#include <mach/mach.h>
-#include <CoreFoundation/CFNumber.h>
-#include <IOKit/IOKitLib.h>
-#include <IOKit/IOCFPlugIn.h>
-#include <IOKit/usb/IOUSBLib.h>
-
+#include "trancevibe.h"
 
 #define kTVisualPluginName	"\014rezTunes"
 #define	kTVisualPluginCreator	'hook'
 
 #define kTVisualPluginMajorVersion 1
-#define kTVisualPluginMinorVersion 0
+#define kTVisualPluginMinorVersion 1
 #define	kTVisualPluginReleaseStage	finalStage
 #define	kTVisualPluginNonFinalRelease 0
 
@@ -85,6 +83,7 @@ typedef struct VisualPluginData {
 	CFMutableArrayRef	vibeDevHandles;
 	CFMutableArrayRef	vibeIntHandles;
 	CFMutableArrayRef	energyHistory[ FREQUENCYBANDS ];
+	trancevibe tv;
 } VisualPluginData;
 
 
@@ -100,8 +99,8 @@ static void MemClear( LogicalAddress dest, SInt32 length );
 static void ProcessRenderData( VisualPluginData *vPD, const RenderVisualData *renderData );
 static void UpdateScreen( VisualPluginData *vPD );
 
-static void FindDevices( VisualPluginData *vPD );
-static void SetupDevice( io_service_t usbHandle, VisualPluginData *vPD );
+static void SetupDevice( 
+VisualPluginData *vPD );
 static void SetSpeed( VisualPluginData *vPD );
 static void CleanupDevice( VisualPluginData *vPD );
 
@@ -180,9 +179,7 @@ static OSStatus VisualPluginHandler( OSType message, VisualPluginMessageInfo *me
 			messageInfo->u.initMessage.options = 0;
 			messageInfo->u.initMessage.refCon = (void*) vPD;
 			status = PlayerGetPluginFileSpec( vPD->appCookie, vPD->appProc, &vPD->pluginFileSpec );
-			
-			if( status == noErr ) FindDevices( vPD );
-			
+			SetupDevice(vPD);		
 			break;
 		}
 			
@@ -407,108 +404,9 @@ static void UpdateScreen( VisualPluginData *vPD )
 	QDEndCGContext( vPD->destPort, &cgcontext );
 }
 
-/*
- * Begin to search for vibrators.
- */
-static void FindDevices( VisualPluginData *vPD )
+static void SetupDevice( VisualPluginData *vPD )
 {
-			CFMutableDictionaryRef matchDict = 0;
-			SInt32 idProduct = PRODUCTID;
-			SInt32 idVendor = VENDORID;
-			io_iterator_t iterator = 0;
-			io_service_t usbHandle;
-			mach_port_t ioPort = 0;
-			CFNumberRef numberRef;
-			
-			if( ( IOMasterPort( MACH_PORT_NULL, &ioPort ) ) ) return;
-			
-			if( !( matchDict = IOServiceMatching( kIOUSBDeviceClassName ) ) ) return;
-			
-			if( !( numberRef = CFNumberCreate( kCFAllocatorDefault, kCFNumberSInt32Type, &idVendor ) ) ) return;
-			CFDictionaryAddValue( matchDict, CFSTR( kUSBVendorID ), numberRef );
-			CFRelease( numberRef );
-			
-			numberRef = 0;
-			if( !( numberRef = CFNumberCreate( kCFAllocatorDefault, kCFNumberSInt32Type, &idProduct ) ) ) return;
-			CFDictionaryAddValue( matchDict, CFSTR( kUSBProductID ), numberRef );
-			CFRelease( numberRef );
-			
-			if( ( IOServiceGetMatchingServices( ioPort, matchDict, &iterator ) ) ) return;
-			
-			while( ( usbHandle = IOIteratorNext( iterator ) ) ) SetupDevice( usbHandle, vPD );
-}
-
-/*
- * This was much shorter to write in libUSB.  This function embarks
- * on a USB Death March to acquire a genuine device handle, initialise
- * and configure it, and then search out it's interface handle.
- *
- * The two structures ( in this case, double indirected pointers to them ) 
- * are then stored in a CFMutableArray, which has been constructed not to
- * interfere with the pointers in any way.
- */
-static void SetupDevice( io_service_t usbHandle, VisualPluginData *vPD )
-{
-    IOUSBFindInterfaceRequest interfaceRequest;
-	IOUSBInterfaceInterface **intf;	
-    io_service_t usbInterfaceRef;
-    IOCFPlugInInterface **iodev;
-    IOUSBDeviceInterface **dev;
-    io_iterator_t iterator;
-    SInt32 score;
-    IOReturn err;
-    
-    err = IOCreatePlugInInterfaceForService( usbHandle, kIOUSBDeviceUserClientTypeID, kIOCFPlugInInterfaceID, &iodev, &score );
-    if( err || !iodev ) return;
-    err = ( *iodev )->QueryInterface( iodev, CFUUIDGetUUIDBytes( kIOUSBDeviceInterfaceID ), (LPVOID) &( dev ) );
-	IODestroyPlugInInterface( iodev );
-    if( err || !dev ) return;
-		
-    err = ( *dev )->USBDeviceOpen( dev );
-    if( err ) return;
-	
-	/*
-	 * The ASCII Vibe only has one configuration, which allows
-	 * us to skip yet another long query section.
-	 */
-    err = ( *dev )->SetConfiguration( dev, 1 );
-    if( err )
-    {
-        ( *dev )->USBDeviceClose( dev );
-        ( *dev )->Release( dev );
-		return;
-    }
-    
-    interfaceRequest.bInterfaceClass = \
-		interfaceRequest.bInterfaceSubClass = \
-		interfaceRequest.bInterfaceProtocol = \
-		interfaceRequest.bAlternateSetting = kIOUSBFindInterfaceDontCare;
-	
-    err = ( *dev )->CreateInterfaceIterator( dev, &interfaceRequest, &iterator );
-    if( err )
-    {
-        ( *dev )->USBDeviceClose( dev );
-        ( *dev )->Release( dev );
-		return;
-    }
-
-	/*
-	 * Likewise, the devices only have one Interface.
-	 */
-	usbInterfaceRef = IOIteratorNext( iterator );
-	err = IOCreatePlugInInterfaceForService( usbInterfaceRef, kIOUSBInterfaceUserClientTypeID, kIOCFPlugInInterfaceID, &iodev, &score );
-	if( err || !iodev )
-	{
-		( *dev )->USBDeviceClose( dev );
-		( *dev )->Release( dev );
-		return;
-	}
-	IOObjectRelease(usbInterfaceRef);
-	err = ( *iodev )->QueryInterface( iodev, CFUUIDGetUUIDBytes( kIOUSBInterfaceInterfaceID ), ( LPVOID ) &( intf ) );
-	IODestroyPlugInInterface(iodev);
-	
-	CFArrayAppendValue( vPD->vibeDevHandles, dev );
-	CFArrayAppendValue( vPD->vibeIntHandles, intf );
+	trancevibe_open(&vPD->tv, 0);
 	vPD->hasVibe = true;	
 }
 
@@ -517,28 +415,8 @@ static void SetupDevice( io_service_t usbHandle, VisualPluginData *vPD )
  */
 static void SetSpeed( VisualPluginData *vPD )
 {		
-	unsigned char iobuff[32];
-	IOUSBDevRequest req;
-	int index;
-
 	if( vPD->hasVibe == false ) return;
-
-	req.bmRequestType = USBmakebmRequestType( kUSBOut, kUSBVendor, kUSBInterface );
-	req.bRequest = 1;
-	req.wValue = (UInt16) vPD->motorSpeed;
-	req.wIndex = 0;
-	req.wLength = 0;
-	req.wLenDone = 0;
-	req.pData = iobuff;
-	
-	for( index = 0; index < CFArrayGetCount( vPD->vibeIntHandles ); index++ )
-	{
-		IOUSBInterfaceInterface **intf = CFArrayGetValueAtIndex( vPD->vibeIntHandles, index );	
-		IOReturn err = ( *intf )->USBInterfaceOpen( intf );
-		if (err) continue;
-		( *intf )->ControlRequest( intf, 0, &req );
-		( *intf )->USBInterfaceClose( intf );
-	}
+	trancevibe_set_speed(vPD->tv, vPD->motorSpeed, 10);
 }
 
 /*
@@ -546,24 +424,9 @@ static void SetSpeed( VisualPluginData *vPD )
  */
 static void CleanupDevice( VisualPluginData *vPD )
 {
-	int index;
-	
 	if( vPD->hasVibe == false ) return;
-	
 	vPD->motorSpeed = 0;
 	SetSpeed( vPD );
-
-	for( index = 0; index < CFArrayGetCount( vPD->vibeIntHandles ); index++ )
-	{
-		IOUSBInterfaceInterface **intf = CFArrayGetValueAtIndex( vPD->vibeIntHandles, index );
-		( *intf )->Release( intf );
-	}
-
-	for( index = 0; index < CFArrayGetCount( vPD->vibeDevHandles ); index++ )
-	{
-		IOUSBDeviceInterface **dev = CFArrayGetValueAtIndex( vPD->vibeDevHandles, index );
-		( *dev )->USBDeviceClose( dev );
-		( *dev )->Release( dev );
-	}
+	trancevibe_close(vPD->tv);
 	vPD->hasVibe = false;
 }
