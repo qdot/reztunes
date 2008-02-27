@@ -7,60 +7,73 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		8C6C89E90C07447D00F50D4C /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C6C89E80C07447D00F50D4C /* Carbon.framework */; };
-		8CFE79EE0C09873B0054298D /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CFE79ED0C09873B0054298D /* IOKit.framework */; };
-		8D576314048677EA00EA77CD /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0AA1909FFE8422F4C02AAC07 /* CoreFoundation.framework */; };
-		8D5B49A804867FD3000E48DA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8D5B49A704867FD3000E48DA /* InfoPlist.strings */; };
-		C1AC89420D752475003B921F /* iTunesAPI.c in Sources */ = {isa = PBXBuildFile; fileRef = C1AC893E0D752475003B921F /* iTunesAPI.c */; };
-		C1AC89430D752475003B921F /* rezTunes.c in Sources */ = {isa = PBXBuildFile; fileRef = C1AC89410D752475003B921F /* rezTunes.c */; };
+		C1AC899D0D7532D5003B921F /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1AC899C0D7532D5003B921F /* IOKit.framework */; };
+		C1AC89AD0D753556003B921F /* iTunesAPI.c in Sources */ = {isa = PBXBuildFile; fileRef = C1AC89A90D753556003B921F /* iTunesAPI.c */; };
+		C1AC89AE0D753556003B921F /* iTunesAPI.h in Headers */ = {isa = PBXBuildFile; fileRef = C1AC89AA0D753556003B921F /* iTunesAPI.h */; };
+		C1AC89AF0D753556003B921F /* iTunesVisualAPI.h in Headers */ = {isa = PBXBuildFile; fileRef = C1AC89AB0D753556003B921F /* iTunesVisualAPI.h */; };
+		C1AC89B00D753556003B921F /* rezTunes.c in Sources */ = {isa = PBXBuildFile; fileRef = C1AC89AC0D753556003B921F /* rezTunes.c */; };
+		C1AC89B30D753567003B921F /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C1AC89B20D753567003B921F /* Info.plist */; };
+		DC2667990BD9410900B4ED68 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C167DFE841241C02AAC07 /* InfoPlist.strings */; };
+		DC26679F0BD9410900B4ED68 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0AA1909FFE8422F4C02AAC07 /* CoreFoundation.framework */; };
+		DC2667A00BD9410900B4ED68 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01285BF100CC2F967F000001 /* Carbon.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		01285BF100CC2F967F000001 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		089C167EFE841241C02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		0AA1909FFE8422F4C02AAC07 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = /System/Library/Frameworks/CoreFoundation.framework; sourceTree = "<absolute>"; };
-		8C3012B50C0E400A00B923EA /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
-		8C6C89E80C07447D00F50D4C /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
-		8CFE79ED0C09873B0054298D /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
-		8D576316048677EA00EA77CD /* rezTunes.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = rezTunes.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
-		8D576317048677EA00EA77CD /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		C1AC893E0D752475003B921F /* iTunesAPI.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = iTunesAPI.c; path = src/iTunesAPI.c; sourceTree = "<group>"; };
-		C1AC893F0D752475003B921F /* iTunesAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = iTunesAPI.h; path = src/iTunesAPI.h; sourceTree = "<group>"; };
-		C1AC89400D752475003B921F /* iTunesVisualAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = iTunesVisualAPI.h; path = src/iTunesVisualAPI.h; sourceTree = "<group>"; };
-		C1AC89410D752475003B921F /* rezTunes.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = rezTunes.c; path = src/rezTunes.c; sourceTree = "<group>"; };
+		C1AC899C0D7532D5003B921F /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
+		C1AC89A90D753556003B921F /* iTunesAPI.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = iTunesAPI.c; path = src/iTunesAPI.c; sourceTree = "<group>"; };
+		C1AC89AA0D753556003B921F /* iTunesAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = iTunesAPI.h; path = src/iTunesAPI.h; sourceTree = "<group>"; };
+		C1AC89AB0D753556003B921F /* iTunesVisualAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = iTunesVisualAPI.h; path = src/iTunesVisualAPI.h; sourceTree = "<group>"; };
+		C1AC89AC0D753556003B921F /* rezTunes.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = rezTunes.c; path = src/rezTunes.c; sourceTree = "<group>"; };
+		C1AC89B20D753567003B921F /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DC2667A60BD9410900B4ED68 /* rezTunes.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = rezTunes.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		8D576313048677EA00EA77CD /* Frameworks */ = {
+		DC26679E0BD9410900B4ED68 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8D576314048677EA00EA77CD /* CoreFoundation.framework in Frameworks */,
-				8C6C89E90C07447D00F50D4C /* Carbon.framework in Frameworks */,
-				8CFE79EE0C09873B0054298D /* IOKit.framework in Frameworks */,
+				DC26679F0BD9410900B4ED68 /* CoreFoundation.framework in Frameworks */,
+				DC2667A00BD9410900B4ED68 /* Carbon.framework in Frameworks */,
+				C1AC899D0D7532D5003B921F /* IOKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		089C166AFE841209C02AAC07 /* rezTunes */ = {
+		01285C0000CC31B17F000001 /* iTunesVisualAPI */ = {
 			isa = PBXGroup;
 			children = (
-				8C3012B50C0E400A00B923EA /* README */,
+			);
+			path = iTunesVisualAPI;
+			sourceTree = "<group>";
+		};
+		089C166AFE841209C02AAC07 /* iTunesPlugIn */ = {
+			isa = PBXGroup;
+			children = (
+				C1AC89B20D753567003B921F /* Info.plist */,
+				C1AC89A90D753556003B921F /* iTunesAPI.c */,
+				C1AC89AA0D753556003B921F /* iTunesAPI.h */,
+				C1AC89AB0D753556003B921F /* iTunesVisualAPI.h */,
+				C1AC89AC0D753556003B921F /* rezTunes.c */,
 				08FB77AFFE84173DC02AAC07 /* Source */,
 				089C167CFE841241C02AAC07 /* Resources */,
 				089C1671FE841209C02AAC07 /* External Frameworks and Libraries */,
 				19C28FB6FE9D52B211CA2CBB /* Products */,
 			);
-			name = rezTunes;
+			name = iTunesPlugIn;
 			sourceTree = "<group>";
 		};
 		089C1671FE841209C02AAC07 /* External Frameworks and Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				8CFE79ED0C09873B0054298D /* IOKit.framework */,
-				8C6C89E80C07447D00F50D4C /* Carbon.framework */,
+				C1AC899C0D7532D5003B921F /* IOKit.framework */,
 				0AA1909FFE8422F4C02AAC07 /* CoreFoundation.framework */,
+				01285BF100CC2F967F000001 /* Carbon.framework */,
 			);
 			name = "External Frameworks and Libraries";
 			sourceTree = "<group>";
@@ -68,8 +81,7 @@
 		089C167CFE841241C02AAC07 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				8D576317048677EA00EA77CD /* Info.plist */,
-				8D5B49A704867FD3000E48DA /* InfoPlist.strings */,
+				089C167DFE841241C02AAC07 /* InfoPlist.strings */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -77,10 +89,7 @@
 		08FB77AFFE84173DC02AAC07 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				C1AC893E0D752475003B921F /* iTunesAPI.c */,
-				C1AC893F0D752475003B921F /* iTunesAPI.h */,
-				C1AC89400D752475003B921F /* iTunesVisualAPI.h */,
-				C1AC89410D752475003B921F /* rezTunes.c */,
+				01285C0000CC31B17F000001 /* iTunesVisualAPI */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -88,30 +97,43 @@
 		19C28FB6FE9D52B211CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8D576316048677EA00EA77CD /* rezTunes.bundle */,
+				DC2667A60BD9410900B4ED68 /* rezTunes.bundle */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
+/* Begin PBXHeadersBuildPhase section */
+		DC2667940BD9410900B4ED68 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C1AC89AE0D753556003B921F /* iTunesAPI.h in Headers */,
+				C1AC89AF0D753556003B921F /* iTunesVisualAPI.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
 /* Begin PBXNativeTarget section */
-		8D57630D048677EA00EA77CD /* rezTunes */ = {
+		DC2667930BD9410900B4ED68 /* rezTunes */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 1DEB911A08733D790010E9CD /* Build configuration list for PBXNativeTarget "rezTunes" */;
+			buildConfigurationList = DC2667A10BD9410900B4ED68 /* Build configuration list for PBXNativeTarget "rezTunes" */;
 			buildPhases = (
-				8D57630F048677EA00EA77CD /* Resources */,
-				8D576311048677EA00EA77CD /* Sources */,
-				8D576313048677EA00EA77CD /* Frameworks */,
+				DC2667940BD9410900B4ED68 /* Headers */,
+				DC2667970BD9410900B4ED68 /* Resources */,
+				DC26679B0BD9410900B4ED68 /* Sources */,
+				DC26679E0BD9410900B4ED68 /* Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = rezTunes;
-			productInstallPath = "$(HOME)/Library/Bundles";
-			productName = rezTunes;
-			productReference = 8D576316048677EA00EA77CD /* rezTunes.bundle */;
+			productInstallPath = "/Users/guillerm/Library/iTunes/iTunes Plug-ins";
+			productName = iTunesPlugIn;
+			productReference = DC2667A60BD9410900B4ED68 /* rezTunes.bundle */;
 			productType = "com.apple.product-type.bundle";
 		};
 /* End PBXNativeTarget section */
@@ -119,43 +141,44 @@
 /* Begin PBXProject section */
 		089C1669FE841209C02AAC07 /* Project object */ = {
 			isa = PBXProject;
-			buildConfigurationList = 1DEB911E08733D790010E9CD /* Build configuration list for PBXProject "rezTunes" */;
+			buildConfigurationList = AF2F40450BD811FE009D75EB /* Build configuration list for PBXProject "rezTunes" */;
 			compatibilityVersion = "Xcode 2.4";
 			hasScannedForEncodings = 1;
-			mainGroup = 089C166AFE841209C02AAC07 /* rezTunes */;
+			mainGroup = 089C166AFE841209C02AAC07 /* iTunesPlugIn */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				8D57630D048677EA00EA77CD /* rezTunes */,
+				DC2667930BD9410900B4ED68 /* rezTunes */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		8D57630F048677EA00EA77CD /* Resources */ = {
+		DC2667970BD9410900B4ED68 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8D5B49A804867FD3000E48DA /* InfoPlist.strings in Resources */,
+				DC2667990BD9410900B4ED68 /* InfoPlist.strings in Resources */,
+				C1AC89B30D753567003B921F /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		8D576311048677EA00EA77CD /* Sources */ = {
+		DC26679B0BD9410900B4ED68 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C1AC89420D752475003B921F /* iTunesAPI.c in Sources */,
-				C1AC89430D752475003B921F /* rezTunes.c in Sources */,
+				C1AC89AD0D753556003B921F /* iTunesAPI.c in Sources */,
+				C1AC89B00D753556003B921F /* rezTunes.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		8D5B49A704867FD3000E48DA /* InfoPlist.strings */ = {
+		089C167DFE841241C02AAC07 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
 				089C167EFE841241C02AAC07 /* English */,
@@ -166,78 +189,138 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		1DEB911B08733D790010E9CD /* Debug */ = {
+		AF2F40460BD811FE009D75EB /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				INFOPLIST_FILE = Info.plist;
-				INSTALL_PATH = "$(HOME)/Library/Bundles";
-				PRODUCT_NAME = rezTunes;
-				WRAPPER_EXTENSION = bundle;
-				ZERO_LINK = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.3;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};
-			name = Debug;
+			name = Development;
 		};
-		1DEB911C08733D790010E9CD /* Release */ = {
+		AF2F40470BD811FE009D75EB /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = (
 					ppc,
 					i386,
 				);
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+			};
+			name = Deployment;
+		};
+		AF2F40480BD811FE009D75EB /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+			};
+			name = Default;
+		};
+		DC2667A20BD9410900B4ED68 /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GENERATE_PKGINFO_FILE = YES;
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = "iTunes_Visualizer-Info.plist";
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = "iTunes Visualizer";
+				REZ_EXECUTABLE = YES;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = bundle;
+				ZERO_LINK = YES;
+			};
+			name = Development;
+		};
+		DC2667A30BD9410900B4ED68 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GENERATE_PKGINFO_FILE = YES;
+				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = Info.plist;
-				INSTALL_PATH = "$(HOME)/Library/Bundles";
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = rezTunes;
+				REZ_EXECUTABLE = YES;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = bundle;
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+		DC2667A40BD9410900B4ED68 /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = "iTunes_Visualizer-Info.plist";
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = "iTunes Visualizer";
+				REZ_EXECUTABLE = YES;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
 				WRAPPER_EXTENSION = bundle;
 			};
-			name = Release;
-		};
-		1DEB911F08733D790010E9CD /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				PREBINDING = NO;
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
-			};
-			name = Debug;
-		};
-		1DEB912008733D790010E9CD /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				PREBINDING = NO;
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
-			};
-			name = Release;
+			name = Default;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		1DEB911A08733D790010E9CD /* Build configuration list for PBXNativeTarget "rezTunes" */ = {
+		AF2F40450BD811FE009D75EB /* Build configuration list for PBXProject "rezTunes" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				1DEB911B08733D790010E9CD /* Debug */,
-				1DEB911C08733D790010E9CD /* Release */,
+				AF2F40460BD811FE009D75EB /* Development */,
+				AF2F40470BD811FE009D75EB /* Deployment */,
+				AF2F40480BD811FE009D75EB /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Default;
 		};
-		1DEB911E08733D790010E9CD /* Build configuration list for PBXProject "rezTunes" */ = {
+		DC2667A10BD9410900B4ED68 /* Build configuration list for PBXNativeTarget "rezTunes" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				1DEB911F08733D790010E9CD /* Debug */,
-				1DEB912008733D790010E9CD /* Release */,
+				DC2667A20BD9410900B4ED68 /* Development */,
+				DC2667A30BD9410900B4ED68 /* Deployment */,
+				DC2667A40BD9410900B4ED68 /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Default;
 		};
 /* End XCConfigurationList section */
 	};
