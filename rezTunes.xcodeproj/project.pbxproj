@@ -28,7 +28,7 @@
 		C1AC89AB0D753556003B921F /* iTunesVisualAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = iTunesVisualAPI.h; path = src/iTunesVisualAPI.h; sourceTree = "<group>"; };
 		C1AC89AC0D753556003B921F /* rezTunes.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = rezTunes.c; path = src/rezTunes.c; sourceTree = "<group>"; };
 		C1AC89B20D753567003B921F /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		DC2667A60BD9410900B4ED68 /* rezTunes.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = rezTunes.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		DC2667A60BD9410900B4ED68 /* iTunes Visualizer.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "iTunes Visualizer.bundle"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,7 +97,7 @@
 		19C28FB6FE9D52B211CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				DC2667A60BD9410900B4ED68 /* rezTunes.bundle */,
+				DC2667A60BD9410900B4ED68 /* iTunes Visualizer.bundle */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -133,7 +133,7 @@
 			name = rezTunes;
 			productInstallPath = "/Users/guillerm/Library/iTunes/iTunes Plug-ins";
 			productName = iTunesPlugIn;
-			productReference = DC2667A60BD9410900B4ED68 /* rezTunes.bundle */;
+			productReference = DC2667A60BD9410900B4ED68 /* iTunes Visualizer.bundle */;
 			productType = "com.apple.product-type.bundle";
 		};
 /* End PBXNativeTarget section */

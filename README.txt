@@ -34,4 +34,5 @@ License
 
  This work is licensed under the Creative Commons Attribution 3.0 license, 
 detailed at http://creativecommons.org/licenses/by/3.0/ .  You are free to 
-share and remix this sourcecode, providing it is attributed correctly.
+share and remix this sourcecode, providing it is attributed correctly. See
+LICENSE.txt for more information.

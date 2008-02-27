@@ -1,0 +1,6 @@
+libtrancevibe ChangeLog
+=======================
+
+2008-02-26 Kyle Machulis <kyle@nonpolynomial.com>
+	* Moved rezTunes into libtrancevibe sourceforge project (No major changes to Bryn Davies' original code)
+	* Updated Xcode project to produce working universal iTunes bundle
