@@ -7,26 +7,26 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		8C6C88EA0C06A6B100F50D4C /* iTunesAPI.c in Sources */ = {isa = PBXBuildFile; fileRef = 8C6C88E70C06A6B100F50D4C /* iTunesAPI.c */; };
-		8C6C88F00C06A6DC00F50D4C /* rezTunes.c in Sources */ = {isa = PBXBuildFile; fileRef = 8C6C88EF0C06A6DC00F50D4C /* rezTunes.c */; };
 		8C6C89E90C07447D00F50D4C /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C6C89E80C07447D00F50D4C /* Carbon.framework */; };
 		8CFE79EE0C09873B0054298D /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CFE79ED0C09873B0054298D /* IOKit.framework */; };
 		8D576314048677EA00EA77CD /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0AA1909FFE8422F4C02AAC07 /* CoreFoundation.framework */; };
 		8D5B49A804867FD3000E48DA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8D5B49A704867FD3000E48DA /* InfoPlist.strings */; };
+		C1AC89420D752475003B921F /* iTunesAPI.c in Sources */ = {isa = PBXBuildFile; fileRef = C1AC893E0D752475003B921F /* iTunesAPI.c */; };
+		C1AC89430D752475003B921F /* rezTunes.c in Sources */ = {isa = PBXBuildFile; fileRef = C1AC89410D752475003B921F /* rezTunes.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		089C167EFE841241C02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		0AA1909FFE8422F4C02AAC07 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = /System/Library/Frameworks/CoreFoundation.framework; sourceTree = "<absolute>"; };
 		8C3012B50C0E400A00B923EA /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
-		8C6C88E70C06A6B100F50D4C /* iTunesAPI.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = iTunesAPI.c; sourceTree = "<group>"; };
-		8C6C88E80C06A6B100F50D4C /* iTunesAPI.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = iTunesAPI.h; sourceTree = "<group>"; };
-		8C6C88E90C06A6B100F50D4C /* iTunesVisualAPI.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = iTunesVisualAPI.h; sourceTree = "<group>"; };
-		8C6C88EF0C06A6DC00F50D4C /* rezTunes.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = rezTunes.c; sourceTree = "<group>"; };
 		8C6C89E80C07447D00F50D4C /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		8CFE79ED0C09873B0054298D /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
 		8D576316048677EA00EA77CD /* rezTunes.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = rezTunes.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D576317048677EA00EA77CD /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		C1AC893E0D752475003B921F /* iTunesAPI.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = iTunesAPI.c; path = src/iTunesAPI.c; sourceTree = "<group>"; };
+		C1AC893F0D752475003B921F /* iTunesAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = iTunesAPI.h; path = src/iTunesAPI.h; sourceTree = "<group>"; };
+		C1AC89400D752475003B921F /* iTunesVisualAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = iTunesVisualAPI.h; path = src/iTunesVisualAPI.h; sourceTree = "<group>"; };
+		C1AC89410D752475003B921F /* rezTunes.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = rezTunes.c; path = src/rezTunes.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,10 +77,10 @@
 		08FB77AFFE84173DC02AAC07 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				8C6C88E70C06A6B100F50D4C /* iTunesAPI.c */,
-				8C6C88E80C06A6B100F50D4C /* iTunesAPI.h */,
-				8C6C88E90C06A6B100F50D4C /* iTunesVisualAPI.h */,
-				8C6C88EF0C06A6DC00F50D4C /* rezTunes.c */,
+				C1AC893E0D752475003B921F /* iTunesAPI.c */,
+				C1AC893F0D752475003B921F /* iTunesAPI.h */,
+				C1AC89400D752475003B921F /* iTunesVisualAPI.h */,
+				C1AC89410D752475003B921F /* rezTunes.c */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -147,8 +147,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8C6C88EA0C06A6B100F50D4C /* iTunesAPI.c in Sources */,
-				8C6C88F00C06A6DC00F50D4C /* rezTunes.c in Sources */,
+				C1AC89420D752475003B921F /* iTunesAPI.c in Sources */,
+				C1AC89430D752475003B921F /* rezTunes.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
