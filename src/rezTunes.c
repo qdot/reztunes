@@ -13,8 +13,19 @@
  *  http://www.nonpolynomial.com
  */
 
+#if TARGET_OS_WIN32
+#include <windows.h>
+#endif
 #include "iTunesVisualAPI.h"
 #include "trancevibe.h"
+
+#if TARGET_OS_WIN32
+#define	MAIN iTunesPluginMain
+#define IMPEXP	__declspec(dllexport)
+#else
+#define IMPEXP
+#define	MAIN main
+#endif
 
 #define kTVisualPluginName	"\014rezTunes"
 #define	kTVisualPluginCreator	'hook'
@@ -58,12 +69,24 @@
 #define DECAY 10
 #define FALLOFF 90
 
+typedef struct list_element {
+	float value;
+	struct list_element* next;
+} list_element;
+
 typedef struct VisualPluginData {
 	void				*appCookie;
 	ITAppProcPtr		appProc;
 	ITFileSpec			pluginFileSpec;
+
+#if TARGET_OS_MAC
 	CGrafPtr			destPort;
+#else
+	HWND destPort;
+#endif
+
 	Rect				destRect;
+
 	OptionBits			destOptions;
 	UInt32				destBitDepth;
 	RenderVisualData	renderData;
@@ -74,16 +97,17 @@ typedef struct VisualPluginData {
 	Boolean				running;
 	Boolean				hasVibe;
 	Boolean				padding[ 1 ];
+
 	/*
 	 * Things will break if the struct is not
 	 * at least this big.  I'm not sure as to why.
 	 */
 	UInt8				motorSpeed;
 	SInt32				volume;
-	CFMutableArrayRef	vibeDevHandles;
-	CFMutableArrayRef	vibeIntHandles;
-	CFMutableArrayRef	energyHistory[ FREQUENCYBANDS ];
-	trancevibe tv;
+	list_element*       energyHistory[ FREQUENCYBANDS ];
+	int                 energyCount[ FREQUENCYBANDS ];
+	float               energyAggregate[ FREQUENCYBANDS ];
+	trancevibe          tv;
 } VisualPluginData;
 
 
@@ -98,32 +122,25 @@ static void MemClear( LogicalAddress dest, SInt32 length );
 
 static void ProcessRenderData( VisualPluginData *vPD, const RenderVisualData *renderData );
 static void UpdateScreen( VisualPluginData *vPD );
+static OSStatus ChangeVisualPort(VisualPluginData *visualPluginData,GRAPHICS_DEVICE destPort,const Rect *destRect);
 
-static void SetupDevice( 
-VisualPluginData *vPD );
+static void SetupDevice( VisualPluginData *vPD );
 static void SetSpeed( VisualPluginData *vPD );
 static void CleanupDevice( VisualPluginData *vPD );
 
-/*
- * Main entry point is here, not much to see though.
- */
-OSStatus iTunesPluginMainMachO( OSType message, PluginMessageInfo *messageInfo, void *refCon )
+
+// ChangeVisualPort
+//
+static OSStatus ChangeVisualPort(VisualPluginData *visualPluginData,GRAPHICS_DEVICE destPort,const Rect *destRect)
 {
-	OSStatus status;
-	switch( message )
-	{
-		case kPluginInitMessage:
-			status = RegisterVisualPlugin( messageInfo );
-			break;
+	OSStatus		status;
+	
+	status = noErr;
 			
-		case kPluginCleanupMessage:
-			status = noErr;
-			break;
-			
-		default:
-			status = unimpErr;
-			break;
-	}
+	visualPluginData->destPort = destPort;
+	if (destRect != nil)
+		visualPluginData->destRect = *destRect;
+
 	return status;
 }
 
@@ -135,7 +152,6 @@ static OSStatus VisualPluginHandler( OSType message, VisualPluginMessageInfo *me
 	VisualPluginData *vPD;
 	OSStatus status;
 	UInt8 oldSpeed;
-	UInt8 i;
 
 	vPD = ( VisualPluginData * ) refCon;
 	oldSpeed = vPD->motorSpeed;
@@ -151,7 +167,7 @@ static OSStatus VisualPluginHandler( OSType message, VisualPluginMessageInfo *me
 		{
 			int i = 0;
 			
-			vPD = ( VisualPluginData * ) NewPtrClear( sizeof( VisualPluginData ) );
+			vPD = ( VisualPluginData * ) calloc(1, sizeof( VisualPluginData ) );
 			if( vPD == nil )
 			{
 				status = memFullErr;
@@ -163,18 +179,14 @@ static OSStatus VisualPluginHandler( OSType message, VisualPluginMessageInfo *me
 			vPD->motorSpeed = 0;
 			vPD->running = false;
 			vPD->hasVibe = false;
-			
-			for( i = 0; i < FREQUENCYBANDS; i++ )
-				vPD->energyHistory[ i ] = CFArrayCreateMutable( NULL, RETAINSAMPLES, &kCFTypeArrayCallBacks );
-			
-			/*
-			 * These callbacks turn off reference count management in the
-			 * array, which is important because these are just a group
-			 * of pointers we're using.
-			 */
-			CFArrayCallBacks callbacks = { 0, NULL, NULL, NULL, NULL };				
-			vPD->vibeDevHandles = CFArrayCreateMutable( 0, 0, &callbacks );
-			vPD->vibeIntHandles = CFArrayCreateMutable( 0, 0, &callbacks );
+
+			for(i = 0; i < FREQUENCYBANDS; ++i)
+			{
+				vPD->energyHistory[i] = (list_element*) malloc(sizeof(list_element));
+				vPD->energyHistory[i]->next = nil;
+				vPD->energyCount[i] = 0;
+				vPD->energyAggregate[i] = 0;
+			}
 			
 			messageInfo->u.initMessage.options = 0;
 			messageInfo->u.initMessage.refCon = (void*) vPD;
@@ -188,16 +200,37 @@ static OSStatus VisualPluginHandler( OSType message, VisualPluginMessageInfo *me
 		 */
 		case kVisualPluginCleanupMessage:
 			CleanupDevice( vPD );
-			for( i = 0; i < FREQUENCYBANDS; i++ ) CFRelease( vPD->energyHistory[ i ] );
-			if( vPD != nil ) DisposePtr( ( Ptr ) vPD );
+			int i;
+			for(i = 0; i < FREQUENCYBANDS; ++i)
+			{
+				list_element* cleanup = vPD->energyHistory[i];
+				list_element* old_element;
+				while(cleanup != nil)
+				{
+					old_element = cleanup;
+					cleanup = cleanup->next;
+					free(old_element);
+				}
+			}
+			if( vPD != nil) free( vPD );
 			break;
 
 		case kVisualPluginShowWindowMessage:
 			vPD->destOptions = messageInfo->u.showWindowMessage.options;
-			vPD->destPort = messageInfo->u.showWindowMessage.port;
+			status = ChangeVisualPort( vPD,
+#if TARGET_OS_WIN32
+										messageInfo->u.setWindowMessage.window,
+#else
+										messageInfo->u.setWindowMessage.port,
+#endif
+										&messageInfo->u.showWindowMessage.drawRect);
+			
 			vPD->destRect = messageInfo->u.showWindowMessage.drawRect;
 			vPD->running = true;
-			UpdateScreen( vPD );
+			if(status == noErr)
+			{
+				UpdateScreen( vPD );
+			}
 			break;
 		
 		case kVisualPluginHideWindowMessage:
@@ -265,7 +298,11 @@ static OSStatus RegisterVisualPlugin( PluginMessageInfo *messageInfo )
 		}
 	#endif TARGET_OS_MAC
 
+#if TARGET_OS_MAC
 	playerMessageInfo.u.registerVisualPluginMessage.options					= kVisualProvidesUnicodeName;
+#else
+	playerMessageInfo.u.registerVisualPluginMessage.options					= 0;
+#endif
 	playerMessageInfo.u.registerVisualPluginMessage.handler					= (VisualPluginProcPtr)VisualPluginHandler;
 	playerMessageInfo.u.registerVisualPluginMessage.registerRefCon			= 0;
 	playerMessageInfo.u.registerVisualPluginMessage.creator					= kTVisualPluginCreator;
@@ -318,8 +355,7 @@ static void ProcessRenderData( VisualPluginData *vPD, const RenderVisualData *re
 	{
 		float energy, historicalAverage, ratio;
 		int channel, weight, index;
-		CFNumberRef energyRef;
-		
+
 		historicalAverage = energy = weight = 0;
 		
 		end = powf( 512.0,  ( bandindex + 1 ) / FREQUENCYBANDS );
@@ -334,38 +370,45 @@ static void ProcessRenderData( VisualPluginData *vPD, const RenderVisualData *re
 				weight++;
 			}
 		if( energy ) energy /= weight;
-		start = end;
 		
 		/*
 		 * "Historical" energy.
 		 */
-		for( index = 0; index < CFArrayGetCount( vPD->energyHistory[ bandindex ] ); index++ )
-		{
-			float zog;
-			CFNumberGetValue( CFArrayGetValueAtIndex( vPD->energyHistory[ bandindex ], index ), kCFNumberFloatType, &zog );
-			historicalAverage += zog;
-		}
-		historicalAverage /= CFArrayGetCount( vPD->energyHistory[ bandindex ] );
-		
-		/* 
-		 * Storage of the "Instant" record in the history buffer.
-		 */
-		energyRef = CFNumberCreate( kCFAllocatorDefault, kCFNumberFloatType, &energy );		
-		if( CFArrayGetCount( vPD->energyHistory[ bandindex ] ) >= RETAINSAMPLES )
-			CFArrayRemoveValueAtIndex( vPD->energyHistory[ bandindex ], RETAINSAMPLES - 1 );
-		CFArrayInsertValueAtIndex( vPD->energyHistory[ bandindex ], 0, energyRef );
-		CFRelease( energyRef );
-		
+		historicalAverage = vPD->energyAggregate[ bandindex ] / vPD->energyCount[ bandindex ];
+
 		/*
 		 * Comparisons.
 		 */
 		ratio = energy / historicalAverage;
 		if( energy > historicalAverage + MINPEAK && ratio > SENSITIVITY && ratio > bestratio )
 		{
-		/* CFStringRef b = CFStringCreateWithFormat( 0, 0, CFSTR( "energy: %f, ratio was : %f\n" ), energy, ratio ); CFShow( b ); CFRelease( b ); */
 			bestratio = ratio;
 			vPD->motorSpeed = 255 - ( ( bandindex + 1 ) / FREQUENCYBANDS ) * FALLOFF;
 		}
+	
+		/* 
+		 * Storage of the "Instant" record in the history buffer.
+		 */
+		if( vPD->energyCount[ bandindex ] >= RETAINSAMPLES )
+		{
+			list_element* deadnode = vPD->energyHistory[ bandindex ];
+			vPD->energyAggregate[ bandindex ] -= deadnode->value;
+			vPD->energyHistory[ bandindex ] = deadnode->next;
+			free(deadnode);
+			--vPD->energyCount[ bandindex ];
+		}
+
+		list_element* curr = vPD->energyHistory[ bandindex ];		
+		while(curr->next != nil)
+		{
+			curr = curr->next;
+		}
+		curr->next = (list_element*)malloc(sizeof(list_element));
+		curr = curr->next;
+		curr->next = nil;
+		curr->value = energy;
+		vPD->energyAggregate[ bandindex ] += energy;
+		++vPD->energyCount[ bandindex ];
 	}
 	
 	/*
@@ -386,6 +429,7 @@ static void ProcessRenderData( VisualPluginData *vPD, const RenderVisualData *re
 
 static void UpdateScreen( VisualPluginData *vPD )
 {
+#if TARGET_OS_MAC
 	float motorcolour = vPD->motorSpeed / 255.0;
 	Rect *drawrect = &vPD->destRect;
 	CGContextRef cgcontext;
@@ -402,6 +446,7 @@ static void UpdateScreen( VisualPluginData *vPD )
 		CGContextFillRect( cgcontext, blob );
 	
 	QDEndCGContext( vPD->destPort, &cgcontext );
+#endif
 }
 
 static void SetupDevice( VisualPluginData *vPD )
@@ -429,4 +474,32 @@ static void CleanupDevice( VisualPluginData *vPD )
 	SetSpeed( vPD );
 	trancevibe_close(vPD->tv);
 	vPD->hasVibe = false;
+}
+
+/*
+ * Main entry point is here, not much to see though.
+ */
+
+#if TARGET_OS_WIN32
+IMPEXP OSStatus MAIN(OSType message,PluginMessageInfo *messageInfo,void *refCon)
+#else
+OSStatus iTunesPluginMainMachO(OSType message,PluginMessageInfo *messageInfo,void *refCon)
+#endif
+{
+	OSStatus status;
+	switch( message )
+	{
+		case kPluginInitMessage:
+			status = RegisterVisualPlugin( messageInfo );
+			break;
+			
+		case kPluginCleanupMessage:
+			status = noErr;
+			break;
+			
+		default:
+			status = unimpErr;
+			break;
+	}
+	return status;
 }
