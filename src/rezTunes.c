@@ -156,7 +156,7 @@ static OSStatus VisualPluginHandler( OSType message, VisualPluginMessageInfo *me
 {
 	VisualPluginData *vPD;
 	OSStatus status;
-	UInt8 oldSpeed;
+	UInt8 oldSpeed = 0;
 	static int has_init = 0;
 
 	vPD = ( VisualPluginData * ) refCon;
