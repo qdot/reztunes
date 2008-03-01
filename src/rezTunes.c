@@ -16,6 +16,9 @@
 #if TARGET_OS_WIN32
 #include <windows.h>
 #endif
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
 #include "iTunesVisualAPI.h"
 #include "trancevibe.h"
 
@@ -31,7 +34,7 @@
 #define	kTVisualPluginCreator	'hook'
 
 #define kTVisualPluginMajorVersion 1
-#define kTVisualPluginMinorVersion 1
+#define kTVisualPluginMinorVersion 2
 #define	kTVisualPluginReleaseStage	finalStage
 #define	kTVisualPluginNonFinalRelease 0
 
@@ -69,12 +72,13 @@
 #define DECAY 10
 #define FALLOFF 90
 
-typedef struct list_element {
+struct list_element {
 	float value;
 	struct list_element* next;
-} list_element;
+};
+typedef struct list_element list_element;
 
-typedef struct VisualPluginData {
+struct VisualPluginData {
 	void				*appCookie;
 	ITAppProcPtr		appProc;
 	ITFileSpec			pluginFileSpec;
@@ -108,7 +112,8 @@ typedef struct VisualPluginData {
 	int                 energyCount[ FREQUENCYBANDS ];
 	float               energyAggregate[ FREQUENCYBANDS ];
 	trancevibe          tv;
-} VisualPluginData;
+};
+typedef struct VisualPluginData VisualPluginData;
 
 
 /*
@@ -152,9 +157,10 @@ static OSStatus VisualPluginHandler( OSType message, VisualPluginMessageInfo *me
 	VisualPluginData *vPD;
 	OSStatus status;
 	UInt8 oldSpeed;
+	static int has_init = 0;
 
 	vPD = ( VisualPluginData * ) refCon;
-	oldSpeed = vPD->motorSpeed;
+	if (has_init) oldSpeed = vPD->motorSpeed;
 	
 	status = noErr;
 	
@@ -166,8 +172,9 @@ static OSStatus VisualPluginHandler( OSType message, VisualPluginMessageInfo *me
 		case kVisualPluginInitMessage:
 		{
 			int i = 0;
-			
-			vPD = ( VisualPluginData * ) calloc(1, sizeof( VisualPluginData ) );
+
+			has_init = 1;
+			vPD = ( VisualPluginData * ) malloc(sizeof( VisualPluginData ) );
 			if( vPD == nil )
 			{
 				status = memFullErr;
@@ -177,6 +184,7 @@ static OSStatus VisualPluginHandler( OSType message, VisualPluginMessageInfo *me
 			vPD->appCookie	= messageInfo->u.initMessage.appCookie;
 			vPD->appProc	= messageInfo->u.initMessage.appProc;
 			vPD->motorSpeed = 0;
+			oldSpeed = vPD->motorSpeed;
 			vPD->running = false;
 			vPD->hasVibe = false;
 
@@ -188,32 +196,33 @@ static OSStatus VisualPluginHandler( OSType message, VisualPluginMessageInfo *me
 				vPD->energyAggregate[i] = 0;
 			}
 			
+			vPD->tv = nil;
+			SetupDevice(vPD);
 			messageInfo->u.initMessage.options = 0;
 			messageInfo->u.initMessage.refCon = (void*) vPD;
-			status = PlayerGetPluginFileSpec( vPD->appCookie, vPD->appProc, &vPD->pluginFileSpec );
-			SetupDevice(vPD);		
 			break;
 		}
-			
 		/*
 		 * Cleanup.
 		 */
 		case kVisualPluginCleanupMessage:
-			CleanupDevice( vPD );
-			int i;
-			for(i = 0; i < FREQUENCYBANDS; ++i)
 			{
-				list_element* cleanup = vPD->energyHistory[i];
-				list_element* old_element;
-				while(cleanup != nil)
-				{
-					old_element = cleanup;
-					cleanup = cleanup->next;
-					free(old_element);
+				int i;
+				CleanupDevice( vPD );
+				for(i = 0; i < FREQUENCYBANDS; ++i)
+				{	
+					list_element* cleanup = vPD->energyHistory[i];
+					list_element* old_element;
+					while(cleanup != nil)
+					{
+						old_element = cleanup;
+						cleanup = cleanup->next;
+						free(old_element);
+					}
 				}
+				if( vPD != nil) free( vPD );
+				break;
 			}
-			if( vPD != nil) free( vPD );
-			break;
 
 		case kVisualPluginShowWindowMessage:
 			vPD->destOptions = messageInfo->u.showWindowMessage.options;
@@ -267,9 +276,11 @@ static OSStatus VisualPluginHandler( OSType message, VisualPluginMessageInfo *me
 			break;
 	}
 	
-	if( vPD->playing == false || vPD->running == false ) vPD->motorSpeed = 0;
-	
-	if( oldSpeed != vPD->motorSpeed && vPD->hasVibe == true ) SetSpeed( vPD );
+	if( has_init == 1)
+	{
+		if (vPD->playing == false || vPD->running == false) vPD->motorSpeed = 0;	
+		if (oldSpeed != vPD->motorSpeed && vPD->hasVibe == true ) SetSpeed( vPD );
+	}
 	
 	return status;	
 }
@@ -281,7 +292,7 @@ static OSStatus RegisterVisualPlugin( PluginMessageInfo *messageInfo )
 	Str255				pluginName = kTVisualPluginName;
 
 	MemClear( &playerMessageInfo.u.registerVisualPluginMessage, sizeof( playerMessageInfo.u.registerVisualPluginMessage ) );
-	BlockMoveData( (Ptr)&pluginName[0], (Ptr)&playerMessageInfo.u.registerVisualPluginMessage.name[0], pluginName[0] + 1 );
+	memcpy(&playerMessageInfo.u.registerVisualPluginMessage.name[0], &pluginName[0], pluginName[0]+1);
 	SetNumVersion( &playerMessageInfo.u.registerVisualPluginMessage.pluginVersion, kTVisualPluginMajorVersion, kTVisualPluginMinorVersion, kTVisualPluginReleaseStage, kTVisualPluginNonFinalRelease );
 
 	#if TARGET_OS_MAC					
@@ -355,8 +366,9 @@ static void ProcessRenderData( VisualPluginData *vPD, const RenderVisualData *re
 	{
 		float energy, historicalAverage, ratio;
 		int channel, weight, index;
-
-		historicalAverage = energy = weight = 0;
+		list_element* curr;
+		historicalAverage = energy = 0;
+		weight = 0;
 		
 		end = powf( 512.0,  ( bandindex + 1 ) / FREQUENCYBANDS );
 
@@ -398,7 +410,7 @@ static void ProcessRenderData( VisualPluginData *vPD, const RenderVisualData *re
 			--vPD->energyCount[ bandindex ];
 		}
 
-		list_element* curr = vPD->energyHistory[ bandindex ];		
+		curr = vPD->energyHistory[ bandindex ];		
 		while(curr->next != nil)
 		{
 			curr = curr->next;
@@ -451,7 +463,7 @@ static void UpdateScreen( VisualPluginData *vPD )
 
 static void SetupDevice( VisualPluginData *vPD )
 {
-	trancevibe_open(&vPD->tv, 0);
+	if(trancevibe_open(&(vPD->tv), 0) < 0) return;
 	vPD->hasVibe = true;	
 }
 
@@ -460,7 +472,7 @@ static void SetupDevice( VisualPluginData *vPD )
  */
 static void SetSpeed( VisualPluginData *vPD )
 {		
-	if( vPD->hasVibe == false ) return;
+	if( vPD->hasVibe == false || vPD->tv == nil) return;
 	trancevibe_set_speed(vPD->tv, vPD->motorSpeed, 10);
 }
 
