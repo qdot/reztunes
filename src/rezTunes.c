@@ -9,7 +9,7 @@
  *  Copyright 2007 Bryn Davies. All rights reserved.
  *  ( But then relicensed - see README )
  *  
- *  Ported to libtrancevibe by Kyle Machulis (kyle@nonpolynomial.com)
+ *  Ported to libtrancevibe and windows by Kyle Machulis (kyle@nonpolynomial.com)
  *  http://www.nonpolynomial.com
  */
 
@@ -30,7 +30,7 @@
 #define	MAIN main
 #endif
 
-#define kTVisualPluginName	"\014rezTunes"
+#define kTVisualPluginName	"\010rezTunes"
 #define	kTVisualPluginCreator	'hook'
 
 #define kTVisualPluginMajorVersion 1
@@ -98,14 +98,14 @@ struct VisualPluginData {
 	ITTrackInfo			trackInfo;
 	ITStreamInfo		streamInfo;
 	Boolean				playing;
-	Boolean				running;
-	Boolean				hasVibe;
-	Boolean				padding[ 1 ];
+	Boolean				padding[ 3 ];
 
 	/*
 	 * Things will break if the struct is not
 	 * at least this big.  I'm not sure as to why.
 	 */
+	Boolean				running;
+	Boolean				hasVibe;
 	UInt8				motorSpeed;
 	SInt32				volume;
 	list_element*       energyHistory[ FREQUENCYBANDS ];
@@ -172,7 +172,6 @@ static OSStatus VisualPluginHandler( OSType message, VisualPluginMessageInfo *me
 		case kVisualPluginInitMessage:
 		{
 			int i = 0;
-
 			has_init = 1;
 			vPD = ( VisualPluginData * ) malloc(sizeof( VisualPluginData ) );
 			if( vPD == nil )
@@ -184,7 +183,6 @@ static OSStatus VisualPluginHandler( OSType message, VisualPluginMessageInfo *me
 			vPD->appCookie	= messageInfo->u.initMessage.appCookie;
 			vPD->appProc	= messageInfo->u.initMessage.appProc;
 			vPD->motorSpeed = 0;
-			oldSpeed = vPD->motorSpeed;
 			vPD->running = false;
 			vPD->hasVibe = false;
 
@@ -198,7 +196,6 @@ static OSStatus VisualPluginHandler( OSType message, VisualPluginMessageInfo *me
 			
 			vPD->tv = nil;
 			SetupDevice(vPD);
-			messageInfo->u.initMessage.options = 0;
 			messageInfo->u.initMessage.refCon = (void*) vPD;
 			break;
 		}
@@ -232,8 +229,7 @@ static OSStatus VisualPluginHandler( OSType message, VisualPluginMessageInfo *me
 #else
 										messageInfo->u.setWindowMessage.port,
 #endif
-										&messageInfo->u.showWindowMessage.drawRect);
-			
+										&messageInfo->u.showWindowMessage.drawRect);			
 			vPD->destRect = messageInfo->u.showWindowMessage.drawRect;
 			vPD->running = true;
 			if(status == noErr)
@@ -266,10 +262,14 @@ static OSStatus VisualPluginHandler( OSType message, VisualPluginMessageInfo *me
 		case kVisualPluginPauseMessage:
 			vPD->playing = false;
 			break;
+
+		case kVisualPluginIdleMessage:
+			break;
+
 		
 		case kVisualPluginEnableMessage:
 		case kVisualPluginDisableMessage:
-			break;
+			return noErr;
 
 		default:
 			status = unimpErr;
@@ -282,7 +282,7 @@ static OSStatus VisualPluginHandler( OSType message, VisualPluginMessageInfo *me
 		if (oldSpeed != vPD->motorSpeed && vPD->hasVibe == true ) SetSpeed( vPD );
 	}
 	
-	return status;	
+	return noErr;	
 }
 
 static OSStatus RegisterVisualPlugin( PluginMessageInfo *messageInfo )
@@ -458,6 +458,26 @@ static void UpdateScreen( VisualPluginData *vPD )
 		CGContextFillRect( cgcontext, blob );
 	
 	QDEndCGContext( vPD->destPort, &cgcontext );
+#else
+	{
+		RECT	srcRect;
+		HBRUSH	hBrush;
+		HDC		hdc;
+		int motorcolour = vPD->motorSpeed;
+		srcRect.left = vPD->destRect.left;
+		srcRect.top = vPD->destRect.top;
+		srcRect.right = vPD->destRect.right;
+		srcRect.bottom = vPD->destRect.bottom;
+		
+		hdc = GetDC(vPD->destPort);		
+		if (!(vPD->hasVibe))
+			hBrush = CreateSolidBrush(RGB((UInt16)motorcolour,0,0));
+		else
+			hBrush = CreateSolidBrush(RGB((UInt16)motorcolour, (UInt16)motorcolour, (UInt16)motorcolour));
+		FillRect(hdc, &srcRect, hBrush);
+		DeleteObject(hBrush);
+		ReleaseDC(vPD->destPort, hdc);
+	}
 #endif
 }
 
