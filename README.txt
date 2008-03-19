@@ -1,4 +1,4 @@
-rezTunes 1.0
+rezTunes 1.1
 ============
 
  This is a simple beat detection plugin for iTunes on OSX.  If you have a "Rez" 
@@ -18,6 +18,8 @@ visualisations, http://cathand.org/ and Sasha and Nick who contributed ideas on
 band processing and mathematics in turn.
 
  rezTunes is copyright, 2007, Bryn Davies, but see the License below for details.
+
+ Code altered for cross platform compatibility by Kyle Machulis, http://www.nonpolynomial.com
 
 Installation
 ============

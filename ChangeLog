@@ -1,6 +1,12 @@
-libtrancevibe ChangeLog
+rezTunes ChangeLog
 =======================
 
+2008-03-18 Kyle Machulis <kyle@nonpolynomial.com> 
+	* Version 1.1
+	* Converted rezTunes to use libtrancevibe for cross platform compatibility
+	* Cleaned some pointer calls due to lack of event order guarantee on windows.
+	
 2008-02-26 Kyle Machulis <kyle@nonpolynomial.com>
+	* Version 1.0
 	* Moved rezTunes into libtrancevibe sourceforge project (No major changes to Bryn Davies' original code)
 	* Updated Xcode project to produce working universal iTunes bundle
