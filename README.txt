@@ -25,11 +25,14 @@ Installation
 ============
 
  Once you have a build of the bundle file, either from building it yourself or
-downloading it from elsewhere, drop it in ~/Library/iTunes/iTunes Plugins/
+downloading it from elsewhere, drop it in 
+
+* Mac - ~/Library/iTunes/iTunes Plugins/
+* Windows - C:\Program Files\iTunes\iTunes Plugins\
 
  It should now be selectable from the visualisations menu.  The vibrator will
 only run while the saver is active, providing you with at least a rudimentary
-boss-key ( Apple-T ).
+boss-key ( Apple-T / Control-T ).
 
 License
 =======
